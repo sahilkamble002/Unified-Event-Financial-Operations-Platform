@@ -22,7 +22,9 @@ const app = express();
 //middlerware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: process.env.CORS_ORIGIN 
+      ? [process.env.CORS_ORIGIN, "http://localhost:5173", process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`].filter(Boolean)
+      : ["http://localhost:5173"],
     credentials: true
   })
 );
