@@ -1,18 +1,26 @@
 {
   "version": 2,
-  "buildCommand": "npm run build --prefix frontend && npm run build --prefix backend",
-  "outputDirectory": "frontend/dist",
-  "functions": {
-    "backend/src/server.js": {
-      "runtime": "nodejs20.x",
-      "memory": 1024,
-      "maxDuration": 60
-    }
-  },
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "backend/src/server.js"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "backend/src/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/src/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/dist/$1"
     }
   ]
 }
